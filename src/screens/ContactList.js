@@ -14,24 +14,25 @@ const ContactList = () => {
     useEffect(() => {
         const requestContactPermission = async () => {
             try {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
-                    {
-                        title: 'Contacts Permission',
-                        message: 'This app needs access to your contacts.',
-                        buttonPositive: 'Allow',
-                        buttonNegative: 'Deny',
-                    }
-                );
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    fetchContacts();
-                } else {
-                    console.log('Contacts permission denied');
+              const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+                {
+                  title: 'Contacts Permission',
+                  message: 'This app needs access to your contacts.',
+                  buttonPositive: 'Allow',
+                  buttonNegative: 'Deny',
+                  buttonNeutral: 'Ask Me Later',
                 }
+              );
+              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                fetchContacts();
+              } else {
+                console.log('Contacts permission denied');
+              }
             } catch (error) {
-                console.log(error);
+              console.log(error);
             }
-        };
+          };
         requestContactPermission();
     }, []);
 
