@@ -68,18 +68,18 @@ const ContactList = () => {
     };
 
     const scrollToLetter = letter => {
-        const index = contacts.findIndex(contact => contact.givenName[0].toUpperCase() === letter);
+        const index = contacts.findIndex(contact => contact.givenName[0].toUpperCase() === letter.toUpperCase());
         if (index !== -1) {
-            flatListRef.current.scrollToIndex({ index });
+          flatListRef.current.scrollToIndex({ index });
+          setSelectedAlphabet(letter);
         }
-    };
+      };
+
 
     const renderItem = ({ item, index }) => {
-        // Remove duplicates and format phone numbers
         const uniquePhoneNumbers = [...new Set(item.phoneNumbers.map(phoneNumber => phoneNumber.number))];
-        const formattedPhoneNumber = formatPhoneNumber(uniquePhoneNumbers[0]); // Take only the first phone number
+        const formattedPhoneNumber = formatPhoneNumber(uniquePhoneNumbers[0]);
 
-        // Check if the current contact has a different alphabet than the previous contact
         const isDifferentAlphabet = index === 0 || item.givenName[0].toUpperCase() !== contacts[index - 1].givenName[0].toUpperCase();
         return (
             <>
@@ -89,10 +89,10 @@ const ContactList = () => {
                     </View>
                 )}
                 <TouchableOpacity onPress={() => console.log(item)}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, justifyContent: 'space-around' }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                            <Text style={{ fontFamily: 'Lato', fontSize: 16, color: '#000', maxWidth: Dimensions.get('window').width * 0.8, marginRight: 10, width: 80 }}>{item.givenName}</Text>
-                            <Text style={{ fontFamily: 'Lato', fontSize: 16, color: '#848484', maxWidth: Dimensions.get('window').width * 0.4 }}>+ {formattedPhoneNumber}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, justifyContent: 'space-around'}}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginLeft: 10 }}>
+                            <Text style={{ fontFamily: 'Lato', fontSize: 14, color: '#000', marginRight: 10, width: 90 }}>{item.givenName}</Text>
+                            <Text style={{ fontFamily: 'Lato', fontSize: 14, color: '#848484', maxWidth: Dimensions.get('window').width * 0.4 }}>+ {formattedPhoneNumber}</Text>
                         </View>
                         <View style={{ height: 1.5, backgroundColor: 'gray' }} />
                         <Image
@@ -107,24 +107,23 @@ const ContactList = () => {
     };
 
 
-    // Function to format phone numbers consistently
     const formatPhoneNumber = phoneNumber => {
-        // Remove all non-digit characters
+        if (!phoneNumber) {
+          return '';
+        }
         const digitsOnly = phoneNumber.replace(/\D/g, '');
-
-        // Format the phone number with a space after every third digit
-        const formattedNumber = digitsOnly.replace(/(\d{2})(\d{3})(\d+)/, '$1 $2 $3');
-
+        const formattedNumber = digitsOnly.replace(/(\d{2})(\d{3})(\d+)/, '$1 $2 $3')
         return formattedNumber;
-    };
+      };
+
 
 
     return (
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.topbar}>
-                <Image source={require('../../assets/back-arrow.png')} style={{ width: 32, height: 32 }} />
-                <Image source={require('../../assets/logo.png')} style={{ width: 80, height: 20 }} />
+                <Image source={require('../../assets/back-arrow.png')} style={{ width: 32, height: 32, marginRight: 70 }} />
+                <Image source={require('../../assets/logo.png')} style={{ width: 80, height: 20, marginRight: 70 }} />
                 <Image source={require('../../assets/shop.png')} style={{ width: 20, height: 25 }} />
             </View>
 
@@ -139,7 +138,7 @@ const ContactList = () => {
             {/* Dummy image, name, and + icon */}
             <View style={styles.userdata}>
                 <Image source={require('../../assets/avatar.png')} style={{ width: 50, height: 50, marginRight: 16 }} />
-                <Text style={{ flex: 1, fontSize: 18, fontFamily: 'Lato', color: '#000' }}>John Doe</Text>
+                <Text style={{ flex: 1, fontSize: 20, fontFamily: 'Lato', color: '#000' }}>John Doe</Text>
                 <Image source={require('../../assets/plus.png')} style={{ width: 20, height: 20 }} />
             </View>
 
@@ -152,14 +151,13 @@ const ContactList = () => {
                 data={contacts}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
-                ListHeaderComponent={() => <Text style={{ fontWeight: 'bold', paddingLeft: 16 }}>Contacts</Text>}
             />
 
             {/* Alphabet list */}
-            <View style={{ position: 'absolute', top: 0, bottom: 0, right: 0, justifyContent: 'center', alignItems: 'center', paddingRight: 10, }}>
+            <View style={{ position: 'absolute', top: 140, bottom: 0, right: 0, justifyContent: 'center', alignItems: 'center', paddingRight: 10, }}>
                 {alphabet.map(letter => (
                     <TouchableOpacity key={letter} onPress={() => scrollToLetter(letter)}>
-                        <Text style={{ fontSize: 12, color: selectedAlphabet === letter ? 'gold' : 'black', paddingVertical: 1 }}>{letter}</Text>
+                        <Text style={{ fontSize: 13, color: selectedAlphabet === letter ? '#BE9F56' : 'black', paddingVertical: 1 }}>{letter}</Text>
                     </TouchableOpacity>
                 ))}
             </View>
@@ -195,12 +193,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'Lato',
         marginTop: 4,
+        marginRight: 40,
     },
     title: {
         fontSize: 17,
         fontFamily: 'Lato',
         fontWeight: 'normal',
         color: '#000',
+        marginRight: 70,
     },
     userdata: {
         flexDirection: 'row',
