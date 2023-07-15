@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, Dimensions, Alert } from 'react-native';
 import Contacts from 'react-native-contacts';
 import { PermissionsAndroid } from 'react-native';
 
@@ -79,6 +79,13 @@ const ContactList = () => {
       flatListRef.current.scrollToIndex({ index });
       setSelectedAlphabet(letter);
     }
+    else {
+      // Alert when the letter is not found
+      Alert.alert('No contacts found', `No contacts found for letter ${letter}`, [
+        { text: 'OK', onPress: () => {} },
+      ]);
+    }
+    
   };
 
   const renderItem = ({ item, index }) => {
