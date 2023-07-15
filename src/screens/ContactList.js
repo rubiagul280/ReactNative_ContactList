@@ -76,35 +76,37 @@ const ContactList = () => {
       };
 
 
-    const renderItem = ({ item, index }) => {
+      const renderItem = ({ item, index }) => {
         const uniquePhoneNumbers = [...new Set(item.phoneNumbers.map(phoneNumber => phoneNumber.number))];
         const formattedPhoneNumber = formatPhoneNumber(uniquePhoneNumbers[0]);
 
         const isDifferentAlphabet = index === 0 || item.givenName[0].toUpperCase() !== contacts[index - 1].givenName[0].toUpperCase();
+        const isLastItem = index === contacts.length - 1 || contacts[index + 1].givenName[0].toUpperCase() !== item.givenName[0].toUpperCase();
+
         return (
-            <>
-                {isDifferentAlphabet && (
-                    <View style={{ padding: 15 }}>
-                        <Text style={{ fontFamily: 'Lato', fontSize: 18, color: '#000' }}>{item.givenName[0].toUpperCase()}</Text>
-                    </View>
-                )}
-                <TouchableOpacity onPress={() => console.log(item)}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, justifyContent: 'space-around'}}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginLeft: 10 }}>
-                            <Text style={{ fontFamily: 'Lato', fontSize: 14, color: '#000', marginRight: 10, width: 90 }}>{item.givenName}</Text>
-                            <Text style={{ fontFamily: 'Lato', fontSize: 14, color: '#848484', maxWidth: Dimensions.get('window').width * 0.4 }}>+ {formattedPhoneNumber}</Text>
-                        </View>
-                        <View style={{ height: 1.5, backgroundColor: 'gray' }} />
-                        <Image
-                            source={item.hasThumbnail ? { uri: item.thumbnailPath } : require('../../assets/invite.png')}
-                            style={{ width: 60, height: 20, marginRight: 15 }}
-                        />
-                        <View style={{ height: 1, backgroundColor: 'lightgray' }} />
-                    </View>
-                </TouchableOpacity>
-            </>
+          <>
+            {isDifferentAlphabet && (
+              <View style={{ padding: 15 }}>
+                <Text style={{ fontFamily: 'Lato', fontSize: 18, color: '#000' }}>{item.givenName[0].toUpperCase()}</Text>
+              </View>
+            )}
+            <TouchableOpacity onPress={() => console.log(item)}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, justifyContent: 'space-around' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginLeft: 10 }}>
+                  <Text style={{ fontFamily: 'Lato', fontSize: 14, color: '#000', marginRight: 10, width: 90 }}>{item.givenName}</Text>
+                  <Text style={{ fontFamily: 'Lato', fontSize: 14, color: '#848484', maxWidth: Dimensions.get('window').width * 0.4 }}>+ {formattedPhoneNumber}</Text>
+                </View>
+                {isLastItem && <View style={{ height: 1.5, backgroundColor: 'gray' }} />}
+                <Image
+                  source={item.hasThumbnail ? { uri: item.thumbnailPath } : require('../../assets/invite.png')}
+                  style={{ width: 60, height: 20, marginRight: 15 }}
+                />
+              </View>
+            </TouchableOpacity>
+          </>
         );
-    };
+      };
+      
 
 
     const formatPhoneNumber = phoneNumber => {
@@ -138,7 +140,7 @@ const ContactList = () => {
             {/* Dummy image, name, and + icon */}
             <View style={styles.userdata}>
                 <Image source={require('../../assets/avatar.png')} style={{ width: 50, height: 50, marginRight: 16 }} />
-                <Text style={{ flex: 1, fontSize: 20, fontFamily: 'Lato', color: '#000' }}>John Doe</Text>
+                <Text style={{ flex: 1, fontSize: 20, fontFamily: 'Lato', color: '#000' }}>Edin Adam</Text>
                 <Image source={require('../../assets/plus.png')} style={{ width: 20, height: 20 }} />
             </View>
 
@@ -161,6 +163,10 @@ const ContactList = () => {
                     </TouchableOpacity>
                 ))}
             </View>
+
+            <View>
+            <Image source={require('../../assets/add_contact.png')} style={{ width: Dimensions.get('window').width, height: 40 }} />
+            </View>
         </View>
     );
 };
@@ -171,6 +177,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        padding: 5,
     },
     topbar: {
         flexDirection: 'row',
@@ -180,8 +187,7 @@ const styles = StyleSheet.create({
     divider: {
         height: 1.5,
         backgroundColor: '#BE9F56',
-        marginBottom: 5,
-        marginTop: 5,
+        margin: 5,
     },
     header: {
         padding: 10,
