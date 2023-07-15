@@ -105,8 +105,7 @@ const ContactList = () => {
           </>
         );
       };
-      
-    
+
 
     // Function to format phone numbers consistently
     const formatPhoneNumber = phoneNumber => {
