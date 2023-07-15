@@ -77,36 +77,35 @@ const ContactList = () => {
     const renderItem = ({ item, index }) => {
         // Remove duplicates and format phone numbers
         const uniquePhoneNumbers = [...new Set(item.phoneNumbers.map(phoneNumber => phoneNumber.number))];
-        const formattedPhoneNumbers = uniquePhoneNumbers.map(phoneNumber => formatPhoneNumber(phoneNumber));
+        const formattedPhoneNumber = formatPhoneNumber(uniquePhoneNumbers[0]); // Take only the first phone number
 
         // Check if the current contact has a different alphabet than the previous contact
         const isDifferentAlphabet = index === 0 || item.givenName[0].toUpperCase() !== contacts[index - 1].givenName[0].toUpperCase();
-
         return (
           <>
             {isDifferentAlphabet && (
-              <View style={styles.alphabetContainer}>
-                <Text style={styles.alphabetText}>{item.givenName[0].toUpperCase()}</Text>
+              <View style={{ padding: 15 }}>
+                <Text style={{ fontFamily: 'Lato', fontSize: 18, color: '#000' }}>{item.givenName[0].toUpperCase()}</Text>
               </View>
             )}
             <TouchableOpacity onPress={() => console.log(item)}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text>{item.givenName}</Text>
-                  {formattedPhoneNumbers.map((phoneNumber, index) => (
-                    <Text key={index}>{phoneNumber}</Text>
-                  ))}
+              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, justifyContent: 'space-around' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 3, justifyContent: 'space-around' }}>
+                  <Text  style={{ fontFamily: 'Lato', fontSize: 16, color: '#000' }}>{item.givenName}</Text>
+                  <Text style={{ fontFamily: 'Lato', fontSize: 16, color: '#848484' }}>+ {formattedPhoneNumber}</Text>
                 </View>
+                <View style={{height: 1.5, backgroundColor: 'gray'}}/>
                 <Image
                   source={item.hasThumbnail ? { uri: item.thumbnailPath } : require('../../assets/invite.png')}
                   style={{ width: 40, height: 30, marginRight: 8 }}
                 />
-                <View style={{height: 1, backgroundColor: 'lightgray'}} />
+                <View style={{ height: 1, backgroundColor: 'lightgray' }} />
               </View>
             </TouchableOpacity>
           </>
         );
       };
+      
     
 
     // Function to format phone numbers consistently
