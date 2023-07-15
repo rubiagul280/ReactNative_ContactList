@@ -106,7 +106,6 @@ const ContactList = () => {
           </>
         );
       };
-      
 
 
     const formatPhoneNumber = phoneNumber => {
